@@ -1,1 +1,16 @@
-/* =================== VARIABLES =================== */
+/* =================== COLORS =================== */
+
+// Primary
+html {
+  --primary: hsl(0, 0%, 52%);
+  --secondary: hsl(0, 0%, 98%);
+  --very-dark-blue: hsl(200, 15%, 8%);
+  --text: hsl(0, 0%, 0%);
+}
+
+html[data-theme='dark'] {
+  --primary: hsl(207, 26%, 17%);
+  --secondary: hsl(209, 23%, 22%);
+  --text: hsl(0, 0%, 100%);
+};
+
