@@ -1,7 +1,7 @@
 <template>
   <div class="countries-list">
     <div class="filter">
-      <input type="text" placeholder="Search for a tst..." 
+      <input type="text" placeholder="Search for a country..." 
         :value="searchKey"
         @input="e => searchKey = e.target.value"
       >

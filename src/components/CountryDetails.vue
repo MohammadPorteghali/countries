@@ -33,6 +33,12 @@
               </span>
             </li>
           </ul>
+          <div class="borders">
+            <div class="title">Border Countries: </div>
+              <div class="items" v-for="(item, index) in bordersFullName" :key="index">
+                {{ item }}
+              </div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,13 +51,31 @@ import Axios from 'axios'
 export default {
   data: () => ({
     country: {},
+    borders: [],
+    bordersFullName: []
   }),
+  methods: {
+    getCountryDetails() {
+      Axios.get(`https://restcountries.eu/rest/v2/name/${this.$route.params.id}`)
+      .then(({data}) => {
+        this.country = data[0]
+        this.country.borders.forEach(element => {
+          this.borders.push(element)
+        });
+        this.getCountryName();
+      })
+    },
+    getCountryName() {
+      this.borders.forEach(element => {
+        Axios.get(`https://restcountries.eu/rest/v2/alpha/${element}`)
+        .then(({data}) => {
+          this.bordersFullName.push(data.name)
+        })
+      });
+    }
+  },
   mounted() {
-    Axios.get(`https://restcountries.eu/rest/v2/name/${this.$route.params.id}`)
-    .then(({data}) => {
-      this.country = data[0]
-      console.log(this.country);
-    })
+    this.getCountryDetails()
   }
 }
 </script>
@@ -60,7 +84,7 @@ export default {
 .countries-list {
   display: flex;
   flex-wrap: wrap;
-  padding: 8vh 5vw;
+  padding: 5vh 5vw;
 
   & .back-button {
     padding: 10px 23px;
@@ -74,33 +98,62 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-around;
+
+    @include respond(tab-port) {
+      margin: 0 2vw;
+    }
   }
 
   & .country {
     display: flex;
     width: 100vw;
-    margin-top: 8vh;
+    margin-top: 5vh;
     flex-wrap: wrap;
 
     & img {
       flex: 0.4;
-      width: 40vw;
+      width: 40%;
+
+      @include respond(tab-port) {
+        width: 85vw;
+        margin: 0 2vw;
+      }
     }
 
     & .details {
       margin-left: 5vw;
 
+      @include respond(tab-port) {
+        margin-left: 2vw;
+      }
+
       & h2 {
         font-size: 24px;
+        margin: 0;
+
+        @include respond(tab-port) {
+          width: 90vw;
+          margin: 4vh 0 0;
+        }
       }
 
       & .info {
-        width: 45vw;
+        width: 49vw;
         display: flex;
+        flex-wrap: wrap;
+
+        @include respond(tab-port) {
+          width: 85vw;
+        }
 
         & ul {
-          flex: .4;
+          flex: .5;
+          margin: 3vh 0 0;
         
+          @include respond(tab-port) {
+            flex: 0 0 100%;
+          }
+
           & li {
             font-size: 15px;
             font-weight: 300;
@@ -113,58 +166,50 @@ export default {
             }
           }
         }
+
+        & .borders {
+          width: 49vw;
+          margin: 3vh 0 0;
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+
+          @include respond(tab-port) {
+            width: 90vw;
+            margin-left: -5px;
+          }
+
+            & .title {
+              font-size: 15px;
+              font-weight: 300;
+              margin-right: 10px;
+
+              @include respond(tab-port) {
+                width: 90vw;
+                margin: 0 0 15px 5px;
+              }
+            }
+
+            & .items {
+              font-size: 12px;
+              font-weight: 300;
+              color: var(--gray);
+              margin: 5px;
+              padding: 5px 7px;
+              min-width: 60px;
+              text-align: center;
+              border: none;
+              box-shadow: 0 0 6px #0000001a;
+              background-color: var(--secondary);
+              border-radius: 5px;
+
+              @include respond(tab-port) {
+                flex: 0 0 calc(33.3333333% - 7vw);
+              }
+            }
+        }
       }
     }
   }
-
-  // & .country {
-  //   flex: 0 0 calc(25% - 5vw);
-  //   margin: 2.5vw;
-  //   background-color: var(--secondary);
-  //   border-radius: 5px;
-  //   box-shadow: 0 0 6px #00000038;
-  //   max-height: 295px;
-
-  //   @include respond(tab-port) {
-  //     flex: 0 0 calc(33.3333333% - 5vw);
-  //   }
-
-  //   @include respond(big-phone) {
-  //     flex: 0 0 calc(50% - 5vw);
-  //   }
-
-  //   @include respond(normal-phone) {
-  //     flex: 0 0 calc(100% - 16vw);
-  //     margin: 3vw 8vw;
-  //   }
-
-  //   & img {
-  //     width: 100%;
-  //     height: 130px;
-  //     object-fit: cover;
-  //     border-top-right-radius: 5px;
-  //     border-top-left-radius: 5px;
-  //   }
-
-  //   & .details {
-  //     padding: 0 1.4vw 1.4vw;
-
-  //   @include respond(normal-phone) {
-  //     padding: 0 4vw 4vw;
-  //   }
-
-  //     & li {
-  //       font-size: 14px;
-  //       margin: 3px 0;
-  //       font-weight: 300;
-
-  //       & span {
-  //         font-size: 14px;
-  //         font-weight: 300;
-  //         color: var(--gray)
-  //       }
-  //     }
-  //   }
-  // }
 }
 </style>
