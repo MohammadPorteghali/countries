@@ -1,7 +1,11 @@
 {
-  "name": "shortly",
+  "name": "countries",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "mopodev",
+    "url": "https://mopodev.ir"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
