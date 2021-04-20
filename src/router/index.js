@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Landing from '../views/Landing'
+import CountriesList from '../components/CountriesList'
+import Country from '../components/CountryDetails'
 
 Vue.use(VueRouter)
 
@@ -8,7 +9,12 @@ const routes = [
   {
     path: '/',
     name: 'landing',
-    component: Landing
+    component: CountriesList,
+  },
+  {
+    path: '/:id',
+    name: 'country',
+    component: Country,
   }
 ]
 

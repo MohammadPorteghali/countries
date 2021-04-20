@@ -1,18 +1,19 @@
 <template>
   <div class="countries-list">
     <div class="filter">
-      <input type="text" placeholder="Search for a country..." 
+      <input type="text" placeholder="Search for a tst..." 
         :value="searchKey"
         @input="e => searchKey = e.target.value"
       >
       <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="search svg-inline--fa fa-search fa-w-16 nav__icon gray-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="13px"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg>
       <div @click="showFilters = !showFilters" class="filter-by-region">
-        {{ filterText }}
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="arrow-down svg-inline--fa fa-chevron-down fa-w-14 dd__icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="10px"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>
+        {{ selectKey ? selectKey : 'Filter by region' }}
+        <svg v-show="!selectKey" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="arrow-down svg-inline--fa fa-chevron-down fa-w-14 dd__icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="10px"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>
+        <svg v-show="selectKey" @click.stop="selectKey = ''" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="arrow-down svg-inline--fa fa-times fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" width="10px"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg>
         <div v-show="showFilters" class="dialog">
           <ul v-for="(region, index) in regions" :key="index">
             <li
-              @click="selectKey = region; filterText = region">
+              @click="selectKey = region">
               {{ region }}
             </li>
           </ul>
@@ -20,7 +21,7 @@
       </div>
     </div>
     <router-link 
-      :to="`/${country.name}`"
+      :to="{ name: 'country', params: { id: country.name }}"
       v-for="(country, index) in filteredCountriesList" :key="index" class="country"
     >
       <img :src="country.flag" :alt="country.name">
@@ -193,7 +194,8 @@ export default {
     }
 
     @include respond(normal-phone) {
-      flex: 0 0 calc(100% - 5vw);
+      flex: 0 0 calc(100% - 16vw);
+      margin: 3vw 8vw;
     }
 
     & img {
@@ -206,6 +208,10 @@ export default {
 
     & .details {
       padding: 0 1.4vw 1.4vw;
+
+    @include respond(normal-phone) {
+      padding: 0 4vw 4vw;
+    }
 
       & li {
         font-size: 14px;
